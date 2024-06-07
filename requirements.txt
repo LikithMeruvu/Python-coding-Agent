@@ -1,0 +1,10 @@
+langchain
+numpy
+pandas
+tiktoken
+langchain-mistralai
+duckduckgo-search
+langchain_community
+langgraph
+Ipython
+DDGS
