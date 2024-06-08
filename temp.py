@@ -1,70 +1,41 @@
-from langchain.agents import initialize_agent
-from langchain_experimental.utilities import PythonREPL
-from langchain_community.tools.ddg_search.tool import DuckDuckGoSearchRun
-from langchain_core.tools import Tool
-from langchain_groq import ChatGroq
-from langchain_community.agent_toolkits import FileManagementToolkit
-# from tempfile import TemporaryDirectory
-import os
+The code has a bug. The error is a NameError("name 'sys' is not defined"). This error occurs because the 'sys' module is not imported. 
 
-# Create the temporary directory for file operations
-working_directory = os.getcwd()
+The corrected code is:
 
-# Create the file management toolkit
-file_management_toolkit = FileManagementToolkit(root_dir=str(working_directory))
-file_tools = file_management_toolkit.get_tools()
+```
+import sys
+import heapq
 
-# Extract individual file operation tools
-read_tool, write_tool, list_tool, copy_tool, delete_tool, move_tool, search_tool = file_tools
+def dijkstra(graph, start):
+    distances = {node: sys.maxsize for node in graph}
+    distances[start] = 0
+    pq = [(0, start)]
 
-# Wrap the file operation tools with Tool class
-read_file_tool = Tool(
-    name="read_file",
-    description="Read a file from the file system.",
-    func=read_tool.invoke,
-)
+    while pq:
+        current_distance, current_node = heapq.heappop(pq)
 
-write_file_tool = Tool(
-    name="write_file",
-    description="Write a file to the file system.",
-    func=write_tool.invoke,
-)
+        if current_distance > distances[current_node]:
+            continue
 
-list_directory_tool = Tool(
-    name="list_directory",
-    description="List files in a directory.",
-    func=list_tool.invoke,
-)
+        for neighbor, weight in graph[current_node].items():
+            distance = current_distance + weight
 
-# Create the Python REPL tool
-python_repl = PythonREPL()
-python_repl_tool = Tool(
-    name="python_repl",
-    description="A Python shell. Use this to execute python commands. Input should be a valid python command. If you want to see the output of a value, you should print it out with `print(...)`.",
-    func=python_repl.run,
-)
+            if distance < distances[neighbor]:
+                distances[neighbor] = distance
+                heapq.heappush(pq, (distance, neighbor))
 
-# Create the DuckDuckGo search tool
-duckduckgo_search = DuckDuckGoSearchRun()
-duckduckgo_search_tool = Tool(
-    name="duckduckgo_search",
-    description="A wrapper around DuckDuckGo Search. Useful for when you need to answer questions about current events. Input should be a search query.",
-    func=duckduckgo_search.run,
-)
+    return distances
 
-# Create the list of tools
-tools = [python_repl_tool, duckduckgo_search_tool, read_file_tool, write_file_tool, list_directory_tool]
+graph = {
+    'A': {'B': 1, 'C': 4},
+    'B': {'A': 1, 'C': 2, 'D': 5},
+    'C': {'A': 4, 'B': 2, 'D': 1},
+    'D': {'B': 5, 'C': 1}
+}
 
-# Initialize the LLM
-llm = ChatGroq(temperature=0, groq_api_key="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", model_name="llama3-8b-8192")
+start_node = 'A'
+result = dijkstra(graph, start_node)
+print(f"Shortest distances from {start_node}: {result}")
+```
 
-# Initialize the agent
-agent = initialize_agent(tools, llm, agent_type="zero-shot-react-description")
-
-# Run the agent
-while True:
-    user_input = input("Enter a command or search query (or 'quit' to stop): ")
-    if user_input.lower() == 'quit':
-        break
-    result = agent.run(user_input)
-    print(result)
+This code should run without errors and produce the correct output.
