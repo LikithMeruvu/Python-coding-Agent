@@ -91,5 +91,9 @@ crew = Crew(
     share_crew=True
 )
 
-result = crew.kickoff(inputs={'topic': 'Write me code for A* searching algo using python'})
-print(result)
+while True:
+    topic = input("Enter the topic: ")
+    if topic.lower() == 'quit':
+        break
+    result = crew.kickoff(inputs={'topic': topic})
+    print(result)
