@@ -58,8 +58,7 @@ Open Respective Files and Add you API info in Variables specified by 'your_api'
 
 ## File Descriptions
 
-- **main.py:** Entry point for running the Python coding agent.
-- **app.py:** Contains the main application logic for the agent.
+- **langgraph.py:** Contains the logic for the agents in langgraph.
 - **openai-agent.py:** Manages interactions with the OpenAI API.
 - **python-coding-agent.py:** Core functionality of the Python coding agent.
 - **temp.py:** Temporary file for testing and experimentation.
